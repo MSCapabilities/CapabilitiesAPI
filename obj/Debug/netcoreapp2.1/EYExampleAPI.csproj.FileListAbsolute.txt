@@ -1,0 +1,14 @@
+C:\Users\tyger\source\repos\EYExampleAPI\EYExampleAPI\bin\Debug\netcoreapp2.1\EYExampleAPI.deps.json
+C:\Users\tyger\source\repos\EYExampleAPI\EYExampleAPI\bin\Debug\netcoreapp2.1\EYExampleAPI.runtimeconfig.json
+C:\Users\tyger\source\repos\EYExampleAPI\EYExampleAPI\bin\Debug\netcoreapp2.1\EYExampleAPI.runtimeconfig.dev.json
+C:\Users\tyger\source\repos\EYExampleAPI\EYExampleAPI\bin\Debug\netcoreapp2.1\EYExampleAPI.dll
+C:\Users\tyger\source\repos\EYExampleAPI\EYExampleAPI\bin\Debug\netcoreapp2.1\EYExampleAPI.pdb
+C:\Users\tyger\source\repos\EYExampleAPI\EYExampleAPI\obj\Debug\netcoreapp2.1\EYExampleAPI.csprojAssemblyReference.cache
+C:\Users\tyger\source\repos\EYExampleAPI\EYExampleAPI\obj\Debug\netcoreapp2.1\EYExampleAPI.csproj.CoreCompileInputs.cache
+C:\Users\tyger\source\repos\EYExampleAPI\EYExampleAPI\obj\Debug\netcoreapp2.1\EYExampleAPI.RazorAssemblyInfo.cache
+C:\Users\tyger\source\repos\EYExampleAPI\EYExampleAPI\obj\Debug\netcoreapp2.1\EYExampleAPI.RazorAssemblyInfo.cs
+C:\Users\tyger\source\repos\EYExampleAPI\EYExampleAPI\obj\Debug\netcoreapp2.1\EYExampleAPI.AssemblyInfoInputs.cache
+C:\Users\tyger\source\repos\EYExampleAPI\EYExampleAPI\obj\Debug\netcoreapp2.1\EYExampleAPI.AssemblyInfo.cs
+C:\Users\tyger\source\repos\EYExampleAPI\EYExampleAPI\obj\Debug\netcoreapp2.1\EYExampleAPI.RazorTargetAssemblyInfo.cache
+C:\Users\tyger\source\repos\EYExampleAPI\EYExampleAPI\obj\Debug\netcoreapp2.1\EYExampleAPI.dll
+C:\Users\tyger\source\repos\EYExampleAPI\EYExampleAPI\obj\Debug\netcoreapp2.1\EYExampleAPI.pdb
