@@ -34,134 +34,15 @@ namespace EYExampleAPI.Controllers
             return _context.ExampleItem;
         }
 
-        // GET: api/Example/5
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetExampleItem([FromRoute] int id)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
 
-            var exampleItem = await _context.ExampleItem.FindAsync(id);
 
-            if (exampleItem == null)
-            {
-                return NotFound();
-            }
-
-            return Ok(exampleItem);
-        }
-
-        // PUT: api/Example/5
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutExampleItem([FromRoute] int id, [FromBody] ExampleItem exampleItem)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            if (id != exampleItem.Id)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(exampleItem).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!ExampleItemExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
-        }
-
-        // POST: api/Example
-        [HttpPost]
-        public async Task<IActionResult> PostExampleItem([FromBody] ExampleItem exampleItem)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            _context.ExampleItem.Add(exampleItem);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetExampleItem", new { id = exampleItem.Id }, exampleItem);
-        }
-
-        // DELETE: api/Example/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteExampleItem([FromRoute] int id)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            var exampleItem = await _context.ExampleItem.FindAsync(id);
-            if (exampleItem == null)
-            {
-                return NotFound();
-            }
-
-            _context.ExampleItem.Remove(exampleItem);
-            await _context.SaveChangesAsync();
-
-            return Ok(exampleItem);
-        }
 
         private bool ExampleItemExists(int id)
         {
             return _context.ExampleItem.Any(e => e.Id == id);
         }
 
-        // GET: api/Example/Tags
-        [Route("tags")]
-        [HttpGet]
-        public async Task<List<string>> GetTags()
-        {
-            var examples = (from m in _context.ExampleItem
-                         select m.Tags).Distinct();
-
-            var returned = await examples.ToListAsync();
-
-            return returned;
-        }
-
-        // GET: api/Meme/Tags
-
-        [HttpGet]
-        [Route("tag")]
-        public async Task<List<ExampleItem>> GetTagsItem([FromQuery] string tags)
-        {
-            var examples = from m in _context.ExampleItem
-                        select m; //get all the memes
-
-
-            if (!String.IsNullOrEmpty(tags)) //make sure user gave a tag to search
-            {
-                examples = examples.Where(s => s.Tags.ToLower().Equals(tags.ToLower())); // find the entries with the search tag and reassign
-            }
-
-            var returned = await examples.ToListAsync(); //return the memes
-
-            return returned;
-        }
-
+       
 
         [HttpPost, Route("upload")]
         public async Task<IActionResult> UploadFile([FromForm]ExampleImageItem example)
@@ -263,6 +144,115 @@ namespace EYExampleAPI.Controllers
                 return "." + extentionList.Last(); //assumes last item is the extension 
             }
         }
+
+
+
+
+        // DELETE: api/Example/5
+        [HttpDelete("{blobName}/{id}")]
+        public async Task<IActionResult> DeleteExampleItemfromBoth([FromRoute] string blobName, [FromRoute] int id)
+        {
+            var accountName = _configuration["AzureBlob:name"];
+            var accountKey = _configuration["AzureBlob:key"]; ;
+            var storageAccount = new CloudStorageAccount(new StorageCredentials(accountName, accountKey), true);
+            CloudBlobClient blobClient = storageAccount.CreateCloudBlobClient();
+
+            CloudBlobContainer imagesContainer = blobClient.GetContainerReference("blobcontainer");
+
+            string storageConnectionString = _configuration["AzureBlob:connectionString"];
+
+            // Check whether the connection string can be parsed.
+            if (CloudStorageAccount.TryParse(storageConnectionString, out storageAccount))
+            {
+          
+                var blob = imagesContainer.GetBlobReference(blobName);
+                if (await blob.DeleteIfExistsAsync() == true)
+                {
+                    if (!ModelState.IsValid)
+                    {
+                        return BadRequest(ModelState);
+                    }
+
+                    var exampleItem = await _context.ExampleItem.FindAsync(id);
+
+                    if (exampleItem == null)
+                    {
+                        return NotFound();
+                    }
+
+                    _context.ExampleItem.Remove(exampleItem);
+                    await _context.SaveChangesAsync();
+                    return Ok($"File: {blobName} has successfully deleted");
+
+                } else
+                {
+                    return BadRequest($"An error has occured.");
+                }
+
+            } else
+            {
+                return BadRequest($"An error has occured.");
+            }
+            
+        }
+
+        //// DELETE: api/Audio/5
+        //[HttpDelete("{id}")]
+        //public async Task<IActionResult> DeleteExampleItem([FromRoute] int id)
+        //{
+        //    if (!ModelState.IsValid)
+        //    {
+        //        return BadRequest(ModelState);
+        //    }
+
+        //    var exampleItem = await _context.ExampleItem.FindAsync(id);
+        //    if (exampleItem == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    _context.ExampleItem.Remove(exampleItem);
+        //    await _context.SaveChangesAsync();
+
+        //    return Ok(exampleItem);
+        //}
+
+
+        //// DELETE: api/Example/5
+        //[HttpDelete("{blobName}")]
+        //public async Task<IActionResult> DeleteExampleItemfromBlob([FromRoute] string blobName)
+        //{
+        //    var accountName = _configuration["AzureBlob:name"];
+        //    var accountKey = _configuration["AzureBlob:key"]; ;
+        //    var storageAccount = new CloudStorageAccount(new StorageCredentials(accountName, accountKey), true);
+        //    CloudBlobClient blobClient = storageAccount.CreateCloudBlobClient();
+
+        //    CloudBlobContainer imagesContainer = blobClient.GetContainerReference("blobcontainer");
+
+        //    string storageConnectionString = _configuration["AzureBlob:connectionString"];
+
+        //    // Check whether the connection string can be parsed.
+        //    if (CloudStorageAccount.TryParse(storageConnectionString, out storageAccount))
+        //    {
+
+        //        var blob = imagesContainer.GetBlobReference(blobName);
+        //        if (await blob.DeleteIfExistsAsync() == true)
+        //        {
+        //            return Ok($"File: {blobName} has successfully deleted");
+
+        //        }
+        //        else
+        //        {
+        //            return BadRequest($"An error has occured.");
+        //        }
+
+        //    }
+        //    else
+        //    {
+        //        return BadRequest($"An error has occured.");
+        //    }
+
+        //}
 
 
     }
